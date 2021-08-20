@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Orders.Model;
 using Orders.Service.Order;
 
 namespace Orders.Controllers
@@ -22,10 +24,20 @@ namespace Orders.Controllers
 
         [HttpGet]
         [Route("GetOrder")]
-        public async Task<IActionResult> Get([FromQuery] GetRequest request)
+        public string Get([FromQuery] GetRequest request)
         {
-            var response = await _orderService.GetOrderForAccountAsync(request.AccountId, request.OrderId);
-            return Ok(response);
+            //var response = await _orderService.GetOrderForAccountAsync(request.AccountId, request.OrderId);
+            return request.AccountId.ToString();
+        }
+
+        [HttpPost]
+        [Route("CreateOrder")]
+        public async Task<IActionResult> NewOrder([FromBody] Order request)
+        {
+            var response = await _orderService.CreateOrder(request);
+            var message = response != null ? "Your order has been created." : "Something went wrong";
+
+            return Ok(message);
         }
     }
 

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Orders.DAL;
+using Orders.Model;
 
 namespace Orders.Service.Order
 {
@@ -17,9 +19,20 @@ namespace Orders.Service.Order
             throw new NotImplementedException();
         }
 
-        public Task<string> CreateOrder(int accountId, Model.Order order)
+        public async Task<string> CreateOrder(Model.Order order)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await using var context = new OrderContext();
+                await context.Orders.AddAsync(order);
+                await context.SaveChangesAsync();                
+
+                return "Success";
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public Task<string> UpdateOrder(int accountId, int orderId, Model.Order order)

@@ -9,7 +9,7 @@ namespace Orders.Service.Order
     {
         Task<Model.Order> GetOrderForAccountAsync(int accountId, int orderId);
         Task<List<Model.Order>> GetAllOrdersForAccountAsync(int accountId, int orderId);
-        Task<string> CreateOrder(int accountId, Model.Order order);
+        Task<string> CreateOrder(Model.Order order);
         Task<string> UpdateOrder(int accountId, int orderId, Model.Order order);
     }
 }

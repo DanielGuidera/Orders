@@ -4,13 +4,13 @@ namespace Orders.Model
 {
     public class Order
     {
-        public Order(int orderId, int accountId, string address, List<OrderItem> orderItems)
-        {
-            OrderId = orderId;
-            AccountId = accountId;
-            Address = address;
-            OrderItems = orderItems;
-        }
+        //public Order(int orderId, int accountId, string address, List<OrderItem> orderItems)
+        //{
+        //    OrderId = orderId;
+        //    AccountId = accountId;
+        //    Address = address;
+        //    OrderItems = orderItems;
+        //}
 
         public int OrderId { get; set; }
         public int AccountId { get; set; }
