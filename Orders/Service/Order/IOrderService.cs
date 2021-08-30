@@ -7,9 +7,9 @@ namespace Orders.Service.Order
 {
     public interface IOrderService
     {
-        Task<Model.Order> GetOrderForAccountAsync(int accountId, int orderId);
-        Task<List<Model.Order>> GetAllOrdersForAccountAsync(int accountId, int orderId);
+        Task<Model.Order> GetOrderDetailsForAccountAsync(Model.Order order);
+        Task<List<Model.Order>> GetAllOrdersForAccountAsync(Model.Order order);
         Task<string> CreateOrder(Model.Order order);
-        Task<string> UpdateOrder(int accountId, int orderId, Model.Order order);
+        Task<string> UpdateOrder(Model.Order order);
     }
 }

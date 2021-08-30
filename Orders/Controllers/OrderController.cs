@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -24,10 +25,18 @@ namespace Orders.Controllers
 
         [HttpGet]
         [Route("GetOrder")]
-        public string Get([FromQuery] GetRequest request)
+        public async Task<IActionResult> Get([FromQuery] Order request)
         {
-            //var response = await _orderService.GetOrderForAccountAsync(request.AccountId, request.OrderId);
-            return request.AccountId.ToString();
+            var response = await _orderService.GetOrderDetailsForAccountAsync(request);
+
+            if (response != null)
+            {
+                return Ok(response);
+            }
+
+            return Ok("Could not find order");
+
+
         }
 
         [HttpPost]

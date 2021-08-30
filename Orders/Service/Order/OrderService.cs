@@ -9,12 +9,27 @@ namespace Orders.Service.Order
 {
     public class OrderService : IOrderService
     {
-        public Task<Model.Order> GetOrderForAccountAsync(int accountId, int orderId)
+        public async Task<Model.Order> GetOrderDetailsForAccountAsync(Model.Order order)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            var retreivedOrder = GetOrderForAccountAsync(order);
+            retreivedOrder.Result.OrderItems = await GetOrderItemsForOrderAsync(retreivedOrder.Result);
+            return retreivedOrder.Result;
         }
 
-        public Task<List<Model.Order>> GetAllOrdersForAccountAsync(int accountId, int orderId)
+        private async Task<Model.Order> GetOrderForAccountAsync(Model.Order order)
+        {
+            await using var context = new OrderContext();
+            return context.Orders.SingleOrDefault(o => o.AccountId == order.AccountId && o.OrderId == order.OrderId);
+        }
+
+        private async Task<List<Model.OrderItem>> GetOrderItemsForOrderAsync(Model.Order order)
+        {
+            await using var context = new OrderContext();
+            return context.OrderItems.Where(i => i.OrderId == order.OrderId).ToList();
+        }
+
+        public Task<List<Model.Order>> GetAllOrdersForAccountAsync(Model.Order order)
         {
             throw new NotImplementedException();
         }
@@ -35,7 +50,7 @@ namespace Orders.Service.Order
             }
         }
 
-        public Task<string> UpdateOrder(int accountId, int orderId, Model.Order order)
+        public Task<string> UpdateOrder(Model.Order order)
         {
             throw new NotImplementedException();
         }
