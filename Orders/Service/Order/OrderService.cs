@@ -12,9 +12,15 @@ namespace Orders.Service.Order
         public async Task<Model.Order> GetOrderDetailsForAccountAsync(Model.Order order)
         {
             //throw new NotImplementedException();
-            var retreivedOrder = GetOrderForAccountAsync(order);
-            retreivedOrder.Result.OrderItems = await GetOrderItemsForOrderAsync(retreivedOrder.Result);
-            return retreivedOrder.Result;
+            var retreivedOrder = await GetOrderForAccountAsync(order);
+            retreivedOrder.OrderItems = await GetOrderItemsForOrderAsync(retreivedOrder);
+
+            foreach (var item in retreivedOrder.OrderItems)
+            {
+                item.Product = await GetProductInfoAsync(item.ProductId);
+            }
+
+            return retreivedOrder;
         }
 
         private async Task<Model.Order> GetOrderForAccountAsync(Model.Order order)
@@ -27,6 +33,20 @@ namespace Orders.Service.Order
         {
             await using var context = new OrderContext();
             return context.OrderItems.Where(i => i.OrderId == order.OrderId).ToList();
+        }
+
+        private async Task<Product> GetProductInfoAsync(int productId)
+        {
+            await using var context = new OrderContext();
+            return context.Products.Where(p => p.ProductId == productId).Select(p => new Product
+            {
+                Name = p.Name,
+                Description = p.Description
+            }).FirstOrDefault();
+
+            //.FirstOrDefault(p => p.ProductId == productId);
+
+
         }
 
         public Task<List<Model.Order>> GetAllOrdersForAccountAsync(Model.Order order)
